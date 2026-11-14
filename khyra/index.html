@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Grade Inquiry System | Lemery Senior High School</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8eeee, white, #f5e8c8);
+    padding: 15px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 25px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 18px;
+    border-top: 7px solid #b30000;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 20px;
+}
+
+h2, h3 {
+    text-align: center;
+    color: #b30000;
+}
+
+input, select, textarea, button {
+    width: 100%;
+    padding: 12px;
+    margin: 7px 0;
+    border-radius: 7px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+}
+
+button {
+    background: #b30000;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #850000;
+}
+
+.secondary {
+    background: #555;
+}
+
+.secondary:hover {
+    background: #333;
+}
+
+.yellow-button {
+    background: #efa900;
+}
+
+.yellow-button:hover {
+    background: #d89500;
+}
+
+.clear-button {
+    background: #ddd;
+    color: #333;
+}
+
+.clear-button:hover {
+    background: #bbb;
+}
+
+.delete-button {
+    background: #777;
+    padding: 8px;
+    font-size: 12px;
+    min-width: 65px;
+}
+
+.hidden {
+    display: none;
+}
+
+.message {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+.step-box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 15px 0;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+.step-label {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px 0 5px;
+}
+
+.paste-box {
+    background: #fffbea;
+    border: 2px dashed #d9aa25;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.paste-title {
+    color: #a77b18;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.note {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 140px;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    min-width: 850px;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background: #b30000;
+    color: white;
+    font-size: 14px;
+}
+
+td input {
+    margin: 0;
+    padding: 9px;
+    text-align: center;
+    min-width: 65px;
+}
+
+.student-name-input {
+    text-align: left;
+    min-width: 150px;
+}
+
+.average-cell {
+    font-weight: bold;
+    color: #b30000;
+    font-size: 16px;
+}
+
+.final-row {
+    background: #fff1f1;
+    font-weight: bold;
+}
+
+.section-title {
+    margin-top: 25px;
+    border-bottom: 2px solid #b30000;
+    padding-bottom: 7px;
+}
+
+@media(max-width: 500px) {
+    .container {
+        padding: 15px;
+    }
+
+    .step-label {
+        font-size: 18px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <img src="LSHS-Logo.jpg"
+         class="logo"
+         alt="Lemery Senior High School Logo">
+
+<!-- HOME -->
+
+<div id="home">
+
+    <h2>Student Login</h2>
+
+    <input type="text" id="studentLRN"
+    placeholder="Enter your LRN" maxlength="12">
+
+    <input type="password" id="studentPassword"
+    placeholder="Enter your Password">
+
+    <button onclick="studentLogin()">LOGIN</button>
+
+    <button class="secondary" onclick="showCreateAccount()">
+        CREATE STUDENT ACCOUNT
+    </button>
+
+    <button class="secondary" onclick="showTeacherLogin()">
+        TEACHER LOGIN
+    </button>
+
+    <p id="homeMessage" class="message"></p>
+
+</div>
+
+
+<!-- CREATE STUDENT ACCOUNT -->
+
+<div id="createAccount" class="hidden">
+
+    <h2>Create Student Account</h2>
+
+    <input type="text" id="newStudentName"
+    placeholder="Full Name">
+
+    <input type="text" id="newStudentLRN"
+    placeholder="12-digit LRN" maxlength="12">
+
+    <input type="password" id="newStudentPassword"
+    placeholder="Create Password">
+
+    <input type="password" id="confirmPassword"
+    placeholder="Confirm Password">
+
+    <button onclick="createStudentAccount()">
+        CREATE ACCOUNT
+    </button>
+
+    <button class="secondary" onclick="showHome()">BACK</button>
+
+    <p id="createMessage" class="message"></p>
+
+</div>
+
+
+<!-- TEACHER LOGIN -->
+
+<div id="teacherLogin" class="hidden">
+
+    <h2>Teacher Login</h2>
+
+    <input type="text" id="teacherUsername"
+    placeholder="Username">
+
+    <input type="password" id="teacherPassword"
+    placeholder="Password">
+
+    <button onclick="teacherLogin()">LOGIN</button>
+
+    <button class="secondary" onclick="showHome()">BACK</button>
+
+    <p id="teacherMessage" class="message"></p>
+
+</div>
+
+
+<!-- STUDENT DASHBOARD -->
+
+<div id="studentDashboard" class="hidden">
+
+    <h2>Student Dashboard</h2>
+
+    <p id="studentWelcome" style="text-align:center;"></p>
+
+    <h3>Select Term</h3>
+
+    <button onclick="viewStudentGrades('1st Term')">
+        1ST TERM
+    </button>
+
+    <button onclick="viewStudentGrades('2nd Term')">
+        2ND TERM
+    </button>
+
+    <button onclick="viewStudentGrades('3rd Term')">
+        3RD TERM
+    </button>
+
+    <div id="studentGradeResult"></div>
+
+    <button class="secondary" onclick="logout()">LOGOUT</button>
+
+</div>
+
+
+<!-- TEACHER DASHBOARD -->
+
+<div id="teacherDashboard" class="hidden">
+
+    <h2>Teacher Dashboard</h2>
+
+    <!-- SELECT TERM -->
+
+    <div class="step-box">
+
+        <div class="step-label">Step 1: Select Term</div>
+
+        <select id="teacherTerm" onchange="loadTeacherTable()">
+
+            <option value="1st Term">1st Term</option>
+            <option value="2nd Term">2nd Term</option>
+            <option value="3rd Term">3rd Term</option>
+
+        </select>
+
+    </div>
+
+
+    <!-- PASTE GRADES -->
+
+    <div class="paste-box">
+
+        <div class="paste-title">
+            Paste Student Names & Grades here:
+        </div>
+
+        <p class="note">
+            Copy all columns directly from Excel.
+            Use this order: Student Name, 3Is, ComProg, UCSP, CPAR, P.E.
+        </p>
+
+        <textarea id="excelData"
+        placeholder="Student Name&#9;3Is&#9;ComProg&#9;UCSP&#9;CPAR&#9;P.E&#10;Juan Dela Cruz&#9;91&#9;92&#9;90&#9;94&#9;95"></textarea>
+
+        <button class="yellow-button" onclick="fillTable()">
+            FILL TABLE FROM PASTE
+        </button>
+
+        <button class="clear-button" onclick="clearTable()">
+            CLEAR TABLE
+        </button>
+
+    </div>
+
+
+    <!-- GRADE TABLE -->
+
+    <h3 class="section-title">Student Final Grades</h3>
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>3Is</th>
+                    <th>ComProg</th>
+                    <th>UCSP</th>
+                    <th>CPAR</th>
+                    <th>P.E</th>
+                    <th>Final Grade (Average)</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="gradeTable"></tbody>
+
+        </table>
+
+    </div>
+
+
+    <button onclick="saveGrades()">
+        SAVE ALL GRADES
+    </button>
+
+    <p id="teacherDashboardMessage" class="message"></p>
+
+    <button class="secondary" onclick="logout()">LOGOUT</button>
+
+</div>
+
+</div>
+
+
+<script>
+
+// SUBJECTS
+
+const subjects = [
+    "3Is",
+    "ComProg",
+    "UCSP",
+    "CPAR",
+    "P.E"
+];
+
+
+// STORAGE
+
+let students = JSON.parse(localStorage.getItem("students")) || [];
+
+let grades = JSON.parse(localStorage.getItem("grades")) || [];
+
+let currentStudent = null;
+
+
+// SHOW AND HIDE PAGES
+
+function hideAll() {
+
+    document.getElementById("home").classList.add("hidden");
+    document.getElementById("createAccount").classList.add("hidden");
+    document.getElementById("teacherLogin").classList.add("hidden");
+    document.getElementById("studentDashboard").classList.add("hidden");
+    document.getElementById("teacherDashboard").classList.add("hidden");
+
+}
+
+function showHome() {
+
+    hideAll();
+
+    document.getElementById("home").classList.remove("hidden");
+
+}
+
+function showCreateAccount() {
+
+    hideAll();
+
+    document.getElementById("createAccount").classList.remove("hidden");
+
+}
+
+function showTeacherLogin() {
+
+    hideAll();
+
+    document.getElementById("teacherLogin").classList.remove("hidden");
+
+}
+
+
+// SAVE DATA
+
+function saveStudents() {
+
+    localStorage.setItem("students", JSON.stringify(students));
+
+}
+
+function saveGradeData() {
+
+    localStorage.setItem("grades", JSON.stringify(grades));
+
+}
+
+
+// CREATE STUDENT ACCOUNT
+
+function createStudentAccount() {
+
+    let name = document.getElementById("newStudentName").value.trim();
+    let lrn = document.getElementById("newStudentLRN").value.trim();
+    let password = document.getElementById("newStudentPassword").value;
+    let confirm = document.getElementById("confirmPassword").value;
+
+    let message = document.getElementById("createMessage");
+
+    if (!name || !lrn || !password || !confirm) {
+        message.textContent = "Please complete all fields.";
+        return;
+    }
+
+    if (!/^\d{12}$/.test(lrn)) {
+        message.textContent = "LRN must contain exactly 12 digits.";
+        return;
+    }
+
+    if (password !== confirm) {
+        message.textContent = "Passwords do not match.";
+        return;
+    }
+
+    if (students.some(s => s.lrn === lrn)) {
+        message.textContent = "This LRN is already registered.";
+        return;
+    }
+
+    students.push({
+        name: name,
+        lrn: lrn,
+        password: password
+    });
+
+    saveStudents();
+
+    message.textContent = "Account successfully created!";
+
+    document.getElementById("newStudentName").value = "";
+    document.getElementById("newStudentLRN").value = "";
+    document.getElementById("newStudentPassword").value = "";
+    document.getElementById("confirmPassword").value = "";
+
+}
+
+
+// STUDENT LOGIN
+
+function studentLogin() {
+
+    let lrn = document.getElementById("studentLRN").value.trim();
+    let password = document.getElementById("studentPassword").value;
+
+    let message = document.getElementById("homeMessage");
+
+    let student = students.find(s =>
+        s.lrn === lrn && s.password === password
+    );
+
+    if (student) {
+
+        currentStudent = student;
+
+        hideAll();
+
+        document.getElementById("studentDashboard").classList.remove("hidden");
+
+        document.getElementById("studentWelcome").innerHTML =
+            "Welcome, " + escapeHTML(student.name) +
+            "<br>LRN: " + escapeHTML(student.lrn);
+
+        document.getElementById("studentGradeResult").innerHTML = "";
+
+    } else {
+
+        message.textContent = "Invalid LRN or Password.";
+
+    }
+
+}
+
+
+// TEACHER LOGIN
+
+function teacherLogin() {
+
+    let username = document.getElementById("teacherUsername").value;
+    let password = document.getElementById("teacherPassword").value;
+
+    let message = document.getElementById("teacherMessage");
+
+    if (username === "teacher" && password === "teacher123") {
+
+        hideAll();
+
+        document.getElementById("teacherDashboard").classList.remove("hidden");
+
+        loadTeacherTable();
+
+    } else {
+
+        message.textContent = "Invalid teacher username or password.";
+
+    }
+
+}
+
+
+// ESCAPE HTML
+
+function escapeHTML(value) {
+
+    return String(value).replace(/[&<>"']/g, function(character) {
+
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+        }[character];
+
+    });
+
+}
+
+
+// COMPUTE AVERAGE
+
+function computeAverage(subjectGrades) {
+
+    let total = 0;
+
+    for (let subject of subjects) {
+
+        let grade = subjectGrades[subject];
+
+        if (grade === "" || grade === undefined || grade === null) {
+            return "";
+        }
+
+        let number = Number(grade);
+
+        if (!Number.isFinite(number) || number < 0 || number > 100) {
+            return "";
+        }
+
+        total += number;
+
+    }
+
+    return (total / subjects.length).toFixed(2);
+
+}
+
+
+// STUDENT VIEW GRADES
+
+function viewStudentGrades(term) {
+
+    let result = document.getElementById("studentGradeResult");
+
+    let record = grades.find(g =>
+        g.lrn === currentStudent.lrn && g.term === term
+    );
+
+    let html = "<h3>" + escapeHTML(term) + " Grades</h3>";
+
+    if (!record) {
+
+        html += "<p class='message'>No grades available yet.</p>";
+
+    } else {
+
+        html += "<div class='table-wrapper'><table>";
+
+        html += "<tr><th>Subject</th><th>Final Grade</th></tr>";
+
+        subjects.forEach(subject => {
+
+            let grade = record.subjectGrades[subject];
+
+            html += "<tr>";
+
+            html += "<td>" + escapeHTML(subject) + "</td>";
+
+            html += "<td>" +
+                (grade === "" || grade === undefined
+                    ? "Not available"
+                    : escapeHTML(grade)) +
+                "</td>";
+
+            html += "</tr>";
+
+        });
+
+        html += "<tr class='final-row'>";
+
+        html += "<td>FINAL GRADE (AVERAGE)</td>";
+
+        html += "<td>" + escapeHTML(record.finalGrade) + "</td>";
+
+        html += "</tr>";
+
+        html += "</table></div>";
+
+    }
+
+    result.innerHTML = html;
+
+}
+
+
+// LOAD TEACHER TABLE
+
+function loadTeacherTable() {
+
+    let term = document.getElementById("teacherTerm").value;
+
+    let table = document.getElementById("gradeTable");
+
+    table.innerHTML = "";
+
+    let selectedGrades = grades.filter(g => g.term === term);
+
+    selectedGrades.forEach(record => {
+
+        addGradeRow(record.name, record.subjectGrades);
+
+    });
+
+    document.getElementById("teacherDashboardMessage").textContent = "";
+
+}
+
+
+// CREATE INPUT
+
+function createInput(className, placeholder, value = "", type = "text") {
+
+    let input = document.createElement("input");
+
+    input.type = type;
+    input.className = className;
+    input.placeholder = placeholder;
+    input.value = value ?? "";
+
+    return input;
+
+}
+
+
+// AUTOMATICALLY ADD STUDENT ROW
+
+function addGradeRow(name = "", subjectGrades = {}) {
+
+    let table = document.getElementById("gradeTable");
+
+    let row = table.insertRow();
+
+    // STUDENT NAME
+
+    let nameCell = row.insertCell();
+
+    let nameInput = createInput(
+        "studentName student-name-input",
+        "Student Name",
+        name
+    );
+
+    nameCell.appendChild(nameInput);
+
+
+    // SUBJECT GRADES
+
+    subjects.forEach(subject => {
+
+        let cell = row.insertCell();
+
+        let input = createInput(
+            "gradeInput",
+            "0-100",
+            subjectGrades[subject] ?? "",
+            "number"
+        );
+
+        input.min = "0";
+        input.max = "100";
+        input.step = "any";
+
+        input.addEventListener("input", function() {
+            updateRowAverage(row);
+        });
+
+        cell.appendChild(input);
+
+    });
+
+
+    // FINAL GRADE
+
+    let averageCell = row.insertCell();
+
+    averageCell.className = "average-cell";
+
+    averageCell.textContent = computeAverage(subjectGrades) || "—";
+
+
+    // DELETE BUTTON
+
+    let actionCell = row.insertCell();
+
+    let deleteButton = document.createElement("button");
+
+    deleteButton.className = "delete-button";
+
+    deleteButton.textContent = "DELETE";
+
+    deleteButton.onclick = function() {
+        deleteGradeRow(this);
+    };
+
+    actionCell.appendChild(deleteButton);
+
+}
+
+
+// UPDATE AVERAGE AUTOMATICALLY
+
+function updateRowAverage(row) {
+
+    let inputs = row.querySelectorAll(".gradeInput");
+
+    let subjectGrades = {};
+
+    subjects.forEach((subject, index) => {
+
+        subjectGrades[subject] = inputs[index].value.trim();
+
+    });
+
+    let average = computeAverage(subjectGrades);
+
+    row.cells[subjects.length + 1].textContent = average || "—";
+
+}
+
+
+// DELETE ROW
+
+function deleteGradeRow(button) {
+
+    button.parentElement.parentElement.remove();
+
+}
+
+
+// FILL TABLE FROM EXCEL
+
+function fillTable() {
+
+    let data = document.getElementById("excelData").value.trim();
+
+    if (data === "") {
+
+        alert("Please paste student names and grades first.");
+
+        return;
+
+    }
+
+    let lines = data.split(/\r?\n/);
+
+    let table = document.getElementById("gradeTable");
+
+    // REMOVE PREVIOUS ROWS
+
+    table.innerHTML = "";
+
+    let startIndex = 0;
+
+    // CHECK HEADER
+
+    let firstColumns = lines[0].split("\t");
+
+    let firstName = (firstColumns[0] || "").trim().toLowerCase();
+
+    if (firstName === "student name" || firstName === "name") {
+        startIndex = 1;
+    }
+
+    let imported = 0;
+
+    // AUTOMATICALLY CREATE ROWS BASED ON PASTED STUDENT NAMES
+
+    for (let i = startIndex; i < lines.length; i++) {
+
+        if (lines[i].trim() === "") continue;
+
+        let columns = lines[i].includes("\t")
+            ? lines[i].split("\t")
+            : lines[i].split(",");
+
+        let name = (columns[0] || "").trim();
+
+        if (name === "") continue;
+
+        let subjectGrades = {};
+
+        subjects.forEach((subject, index) => {
+
+            subjectGrades[subject] =
+                (columns[index + 1] || "").trim();
+
+        });
+
+        addGradeRow(name, subjectGrades);
+
+        imported++;
+
+    }
+
+    document.getElementById("teacherDashboardMessage").textContent =
+        imported + " student record(s) imported. Check the grades before saving.";
+
+    if (imported === 0) {
+        alert("No student names found. Please check your pasted data.");
+    }
+
+}
+
+
+// CLEAR TABLE
+
+function clearTable() {
+
+    document.getElementById("gradeTable").innerHTML = "";
+
+    document.getElementById("excelData").value = "";
+
+    document.getElementById("teacherDashboardMessage").textContent =
+        "Table cleared.";
+
+}
+
+
+// SAVE GRADES
+
+function saveGrades() {
+
+    let term = document.getElementById("teacherTerm").value;
+
+    let rows = document.querySelectorAll("#gradeTable tr");
+
+    let newGrades = [];
+
+    let errors = [];
+
+    if (rows.length === 0) {
+
+        alert("There are no grades to save.");
+
+        return;
+
+    }
+
+
+    rows.forEach((row, index) => {
+
+        let name = row.querySelector(".studentName").value.trim();
+
+        let inputs = row.querySelectorAll(".gradeInput");
+
+        if (name === "") {
+
+            errors.push("Row " + (index + 1) + ": Student name is required.");
+
+            return;
+
+        }
+
+        let subjectGrades = {};
+
+        let allComplete = true;
+
+        subjects.forEach((subject, subjectIndex) => {
+
+            let value = inputs[subjectIndex].value.trim();
+
+            if (value === "") {
+
+                errors.push("Row " + (index + 1) + ": " + subject + " grade is required.");
+
+                allComplete = false;
+
+            } else {
+
+                let number = Number(value);
+
+                if (!Number.isFinite(number) || number < 0 || number > 100) {
+
+                    errors.push("Row " + (index + 1) + ": " + subject + " grade must be from 0 to 100.");
+
+                    allComplete = false;
+
+                } else {
+
+                    subjectGrades[subject] = number;
+
+                }
+
+            }
+
+        });
+
+
+        if (!allComplete) return;
+
+
+        // FIND REGISTERED STUDENT
+
+        let matchingStudents = students.filter(s =>
+            s.name.trim().toLowerCase() === name.toLowerCase()
+        );
+
+        if (matchingStudents.length === 0) {
+
+            errors.push(name + " has no registered student account.");
+
+            return;
+
+        }
+
+        if (matchingStudents.length > 1) {
+
+            errors.push(name + " matches multiple accounts. Check the student name.");
+
+            return;
+
+        }
+
+
+        let student = matchingStudents[0];
+
+        let finalGrade = computeAverage(subjectGrades);
+
+
+        newGrades.push({
+
+            lrn: student.lrn,
+
+            name: student.name,
+
+            term: term,
+
+            subjectGrades: subjectGrades,
+
+            finalGrade: Number(finalGrade)
+
+        });
+
+    });
+
+
+    if (errors.length > 0) {
+
+        alert(errors.join("\n"));
+
+        return;
+
+    }
+
+
+    // CHECK DUPLICATE STUDENTS
+
+    let seen = new Set();
+
+    for (let record of newGrades) {
+
+        if (seen.has(record.lrn)) {
+
+            alert("Duplicate student entry: " + record.name);
+
+            return;
+
+        }
+
+        seen.add(record.lrn);
+
+    }
+
+
+    // REMOVE OLD RECORDS FOR THIS TERM ONLY
+
+    grades = grades.filter(g => g.term !== term);
+
+
+    // SAVE NEW RECORDS
+
+    newGrades.forEach(record => {
+
+        grades.push(record);
+
+    });
+
+
+    saveGradeData();
+
+    loadTeacherTable();
+
+    document.getElementById("teacherDashboardMessage").textContent =
+        "All grades and final averages for " + term + " were successfully saved!";
+
+    alert("Grades and Final Averages successfully saved!");
+
+}
+
+
+// LOGOUT
+
+function logout() {
+
+    currentStudent = null;
+
+    document.getElementById("studentLRN").value = "";
+
+    document.getElementById("studentPassword").value = "";
+
+    document.getElementById("teacherUsername").value = "";
+
+    document.getElementById("teacherPassword").value = "";
+
+    showHome();
+
+}
+
+</script>
+
+</body>
+</html>
